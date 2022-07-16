@@ -5,8 +5,9 @@ import javax.xml.parsers.*;
 import java.io.*;
 
 public class Main {
-    private static int niveau;
+    private static int level;
 
+    // Méthode qui permet de tranformer un path en un string format xml
     public static String pathToXml(String path) {
 
         File directory = new File(path);
@@ -26,7 +27,7 @@ public class Main {
     }
 
     public static Composant inserer(Element e) {
-        Dossier vElement = new Dossier(e.getAttribute("name"), niveau);
+        Dossier vElement = new Dossier(e.getAttribute("name"), level);
         NodeList nodes = e.getChildNodes();
         for (int i = 0; i < nodes.getLength(); i++) {
             if (nodes.item(i).getNodeType() == Node.ELEMENT_NODE) {
@@ -36,14 +37,17 @@ public class Main {
                     myFile = new Fichier(el.getAttribute("name"), vElement.getLevel() + 1);
                     vElement.addComposant(myFile);
                 } else if (el.getNodeName().equals("directory")) {
-                    niveau = vElement.getLevel() + 1;
+                    level = vElement.getLevel() + 1;
                     vElement.addComposant(inserer(el));
-                    niveau--;
+                    level--;
                 }
             }
         }
         return vElement;
     }
+
+    // Création du document XML à partir du String renvoyer par la méthode
+    // pathToXML()
 
     public static Composant xmlToDoc(String xmlstring) throws ParserConfigurationException, SAXException, IOException {
         String xmlStr = "<?xml version=\"1.0\"?>" + xmlstring;
@@ -61,10 +65,6 @@ public class Main {
         String path = args[0];
         String xmlString1 = pathToXml(path);
         System.out.println(xmlString1);
-        // String textPathXml = pathToXml(path);
-        // Document textDocument = StringXmlToXMLDocument(textPathXml);
-        // System.out.println(textPathXml);
-        // System.out.println(textDocument);
         Composant racine = xmlToDoc(xmlString1);
         racine.operation();
 

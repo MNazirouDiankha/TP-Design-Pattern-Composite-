@@ -11,18 +11,18 @@ public class Main {
     public static String pathToXml(String path) {
 
         File directory = new File(path);
-        String xmlstring = "\n" + "<directory name = " + "\"" + directory.getName() + "\"" + ">";
+        String stringXML = "\n" + "<directory name = " + "\"" + directory.getName() + "\"" + ">";
         File[] liste = directory.listFiles();
         for (File f : liste) {
             if (f.isFile()) {
-                xmlstring = xmlstring + "\n" + "\t" + "<file name = " + "\"" + f.getName() + "\"" + "/>";
+                stringXML = stringXML + "\n" + "\t" + "<file name = " + "\"" + f.getName() + "\"" + "/>";
             } else if (f.isDirectory()) {
-                xmlstring = xmlstring + pathToXml(f.getAbsolutePath());
+                stringXML = stringXML + pathToXml(f.getAbsolutePath());
             }
         }
 
-        xmlstring = xmlstring + "\n" + "</directory>" + "\n";
-        return xmlstring;
+        stringXML = stringXML + "\n" + "</directory>" + "\n";
+        return stringXML;
 
     }
 
@@ -46,10 +46,11 @@ public class Main {
         return vElement;
     }
 
-    // Création du document XML à partir du String renvoyer par la méthode
+    // Création du composant à partir du String renvoyer par la méthode
     // pathToXML()
 
-    public static Composant xmlToDoc(String xmlstring) throws ParserConfigurationException, SAXException, IOException {
+    public static Composant xmlToComposant(String xmlstring)
+            throws ParserConfigurationException, SAXException, IOException {
         String xmlStr = "<?xml version=\"1.0\"?>" + xmlstring;
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
@@ -63,9 +64,9 @@ public class Main {
 
     public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
         String path = args[0];
-        String xmlString1 = pathToXml(path);
-        System.out.println(xmlString1);
-        Composant racine = xmlToDoc(xmlString1);
+        String xmlString = pathToXml(path);
+        System.out.println(xmlString);
+        Composant racine = xmlToComposant(xmlString);
         racine.operation();
 
     }

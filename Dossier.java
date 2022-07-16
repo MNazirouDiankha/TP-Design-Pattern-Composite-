@@ -15,7 +15,7 @@ public class Dossier extends Composant {
 
         int level = getLevel();
         for (int i = 0; i < level; i++) {
-            System.out.print("|\t");
+            System.out.print("│\t");
         }
         System.out.println("├───" + getName());
         for (Composant c : composants) {
